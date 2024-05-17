@@ -1,119 +1,33 @@
-import { Payment, columns } from "./columns"
+import { Room, columns } from "./columns"
 import { DataTable } from "./data-table"
 
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    { 
-        id: "918fasda",
-        amount: 139,
-        status: "success",
-        email: "e@ex.com"
-    },
-    // ...
-  ]
+import { createClient } from '@/lib/supabase/server'
+
+async function getData(): Promise<Room[]> {
+
+    const supabase = createClient();
+
+    const data_raw = await supabase.from("rented_rooms").select().order('Contract date', {ascending: false}) //.range(0, 100);
+
+    if (!data_raw.data) {
+        return [];
+    }
+
+    let data: Room[] = [];
+
+    data_raw.data.forEach(room_raw => {
+        data.push({
+            address: room_raw['Current address'],
+            city: room_raw['City'],
+            type: room_raw['Type of room'],
+            reactions_num: room_raw['Number of reactions'],
+            contract_date: new Date(room_raw['Contract date']),
+            account_age: room_raw['Account age'],
+            priority: room_raw['Priority'],
+        });
+    });
+
+    return data;
 }
 
 export default async function DemoPage() {
@@ -125,6 +39,7 @@ export default async function DemoPage() {
         <div className="container mx-auto py-10 flex-grow">
             <DataTable columns={columns} data={data} />
         </div>
+        <h3>Number of results: {data.length}</h3>
     </main>
   )
 }
