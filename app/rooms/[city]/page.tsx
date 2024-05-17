@@ -1,4 +1,3 @@
-import { Link } from "lucide-react";
 import { Room, columns } from "./columns"
 import { DataTable } from "./data-table"
 
@@ -8,7 +7,7 @@ async function getData(city: string): Promise<Room[]> {
 
     const supabase = createClient();
 
-    const data_raw = await supabase.from("rented_rooms").select().ilike("City", `%${city}%`).order('Contract date', {ascending: false}).range(0, 100);
+    const data_raw = await supabase.from("rented_rooms").select().ilike("City", `${city}%`).order('Contract date', {ascending: false}); // .range(0, 100);
 
     if (!data_raw.data) {
         return [];
@@ -41,7 +40,7 @@ export default async function DataPage({ params }: { params: { city: string } })
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <h1>ROOM.nl archive data</h1>
         <div className="container mx-auto py-10 flex-grow">
-            <DataTable columns={columns} data={data} />
+            <DataTable columns={columns} data={data} city={params.city} />
         </div>
         <h3>Number of results: {data.length}</h3>
     </main>

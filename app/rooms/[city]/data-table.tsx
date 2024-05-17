@@ -27,15 +27,18 @@ import { Input } from "@/components/ui/input"
 import { DateRangePicker } from "@/components/ui/datepicker"
 
 import * as React from "react"
+import { DownloadButton } from "./downloadButton"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  city: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  city,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -59,26 +62,27 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div>
+      <div className="flex justify-between">
         <DateRangePicker />
+        <DownloadButton data={data} filename={`room_data_${city}.csv`} />
       </div>
     <div className="flex items-center justify-around py-4">
-    <Input
-        placeholder="Filter address..."
-        value={(table.getColumn("address")?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-        table.getColumn("address")?.setFilterValue(event.target.value)
-        }
-        className="max-w-sm"
-    />
-    <Input
-        placeholder="Filter city..."
-        value={(table.getColumn("city")?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-        table.getColumn("city")?.setFilterValue(event.target.value)
-        }
-        className="max-w-sm"
-    />
+      <Input
+          placeholder="Filter city..."
+          value={(table.getColumn("city")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("city")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+      />
+      <Input
+          placeholder="Filter address..."
+          value={(table.getColumn("address")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+          table.getColumn("address")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+      />
     </div>
     <div className="rounded-md border">
       <Table>
