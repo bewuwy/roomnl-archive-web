@@ -1,45 +1,32 @@
-import { Room, columns } from "./columns"
-import { DataTable } from "./data-table"
+"use client";
 
-import { createClient } from '@/lib/supabase/server'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
-async function getData(): Promise<Room[]> {
+export default function Home() {
 
-    const supabase = createClient();
-
-    const data_raw = await supabase.from("rented_rooms").select().order('Contract date', {ascending: false}).range(0, 100);
-
-    if (!data_raw.data) {
-        return [];
-    }
-
-    let data: Room[] = [];
-
-    data_raw.data.forEach(room_raw => {
-        data.push({
-            address: room_raw['Current address'],
-            city: room_raw['City'],
-            type: room_raw['Type of room'],
-            reactions_num: room_raw['Number of reactions'],
-            contract_date: new Date(room_raw['Contract date']),
-            account_age: room_raw['Account age'],
-            priority: room_raw['Priority'],
-        });
-    });
-
-    return data;
-}
-
-export default async function DemoPage() {
-  const data = await getData()
+  let [city, setCity] = useState("");
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
         <h1>ROOM.nl archive data</h1>
-        <div className="container mx-auto py-10 flex-grow">
-            <DataTable columns={columns} data={data} />
-        </div>
-        <h3>Number of results: {data.length}</h3>
+    
+        <form className="flex flex-col gap-4 pt-4" onSubmit={
+          (event) => {
+            event.preventDefault();
+            window.location.href = `/rooms/${city}`;
+          }
+        }>
+          <Input
+              placeholder="City..."
+              onChange={(event) => setCity(event.target.value)}
+              className="max-w-sm"
+          />
+          <Button type="submit" onClick={() => {
+            window.location.href = `/rooms/${city}`;
+          }}>See data for the city</Button>
+        </form>
     </main>
-  )
+  );
 }
