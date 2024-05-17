@@ -24,6 +24,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
+import { DateRangePicker } from "@/components/ui/datepicker"
+
 import * as React from "react"
 
 interface DataTableProps<TData, TValue> {
@@ -57,6 +59,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
+      <div>
+        <DateRangePicker />
+      </div>
     <div className="flex items-center justify-around py-4">
     <Input
         placeholder="Filter address..."

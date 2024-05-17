@@ -7,7 +7,7 @@ async function getData(): Promise<Room[]> {
 
     const supabase = createClient();
 
-    const data_raw = await supabase.from("rented_rooms").select().order('Contract date', {ascending: false}) //.range(0, 100);
+    const data_raw = await supabase.from("rented_rooms").select().order('Contract date', {ascending: false}).range(0, 100);
 
     if (!data_raw.data) {
         return [];
