@@ -7,7 +7,13 @@ async function getData(city: string): Promise<Room[]> {
 
     const supabase = createClient();
 
-    const data_raw = await supabase.from("rented_rooms").select().ilike("City", `${city}%`).order('Contract date', {ascending: false}); // .range(0, 100);
+    const data_raw = await supabase.from("rented_rooms").select()
+        .ilike("City", `${city}%`).order('Contract date', {ascending: false}); // .range(0, 100);
+
+    if (data_raw.error) {
+        // throw error
+        throw new Error("Error fetching data from Supabase:\n" + data_raw.error.details);
+    }
 
     if (!data_raw.data) {
         return [];
