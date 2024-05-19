@@ -35,8 +35,8 @@ export function DateRangePicker({
 
   let params = new URLSearchParams(searchParams.toString());
 
-  let from_date = from ? new Date(from) : addDays(new Date(), -30)
-  let to_date = to ? new Date(to) : new Date()
+  let from_date = from ? new Date(from) : undefined
+  let to_date = to ? new Date(to) : undefined
 
   if (params.has('from')) {
     from_date = new Date(params.get('from') as string);
@@ -51,15 +51,22 @@ export function DateRangePicker({
   })
 
   useEffect(() => {
-    if (date?.from) {
+    if (date?.from && date?.from != undefined) {
       params.set('from', format(date.from, "yyyy-MM-dd"));
     }
-    if (date?.to) {
+    if (date?.to && date?.to != undefined) {
       params.set('to', format(date.to, "yyyy-MM-dd"));
     }
 
+    if (date?.from == undefined) {
+      params.delete('from');
+    }
+    if (date?.to == undefined) {
+      params.delete('to');
+    }
+
     // Update the URL query string
-    router.push(pathname + '?from=' + params.get('from') + '&to=' + params.get('to'));
+    router.push(pathname + "?" + params.toString());
   }, [date?.from, date?.to]);
 
   return (

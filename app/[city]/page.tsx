@@ -7,7 +7,7 @@ async function getData(city: string, from: string | undefined, to: string | unde
 
     const supabase = createClient();
 
-    if (from == undefined) {
+    if (from == undefined || from === "" || from === "null") {
         from = "2000-01-1"
     }
     else {
@@ -15,7 +15,7 @@ async function getData(city: string, from: string | undefined, to: string | unde
         from = from_date.getFullYear() + "-" + (from_date.getMonth() + 1) + "-" + from_date.getDate();
     }
 
-    if (to == undefined) {
+    if (to == undefined || to === "" || to === "null") {
         to = "2300-01-1"
     }
     else {
