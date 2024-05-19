@@ -1,5 +1,8 @@
 "use client"
 
+import { useEffect } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
 import * as React from "react"
 import { addDays, format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
@@ -14,17 +17,43 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+export interface DatePickerProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  from?: string | undefined,
+  to?: string | undefined
+}
+
 export function DateRangePicker({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+  from,
+  to
+}: DatePickerProps) {
 
-  let from_date = new Date();
-  from_date.setMonth(new Date().getMonth() - 1);
+  const from_date = from ? new Date(from) : addDays(new Date(), -30)
+  const to_date = to ? new Date(to) : new Date()
 
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: from_date,
-    to: new Date(),
+    to: to_date,
   })
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  let params = new URLSearchParams(searchParams.toString());
+
+  useEffect(() => {
+    if (date?.from) {
+      params.set('from', format(date.from, "yyyy-MM-dd"));
+    }
+    if (date?.to) {
+      params.set('to', format(date.to, "yyyy-MM-dd"));
+    }
+
+    // Update the URL query string
+    router.push(pathname + '?from=' + params.get('from') + '&to=' + params.get('to'));
+  }, [date?.from, date?.to]);
 
   return (
     <div className={cn("grid gap-2", className)}>

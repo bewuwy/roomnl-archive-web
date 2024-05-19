@@ -3,12 +3,29 @@ import { DataTable } from "./data-table"
 
 import { createClient } from '@/lib/supabase/server'
 
-async function getData(city: string): Promise<Room[]> {
+async function getData(city: string, from: string | undefined, to: string | undefined): Promise<Room[]> {
 
     const supabase = createClient();
 
+    if (from == undefined) {
+        from = "2000-01-1"
+    }
+    else {
+        let from_date = new Date(from);
+        from = from_date.getFullYear() + "-" + (from_date.getMonth() + 1) + "-" + from_date.getDate();
+    }
+
+    if (to == undefined) {
+        to = "2300-01-1"
+    }
+    else {
+        let to_date = new Date(to);
+        to = to_date.getFullYear() + "-" + (to_date.getMonth() + 1) + "-" + to_date.getDate();
+    }
+
     const data_raw = await supabase.from("rented_rooms").select()
-        .ilike("City", `${city}%`).order('Contract date', {ascending: false}); // .range(0, 100);
+        .ilike("City", `${city}%`).gte('Contract date', from).lte('Contract date', to)
+        .order('Contract date', {ascending: false}); // .range(0, 100);
 
     if (data_raw.error) {
         // throw error
@@ -36,17 +53,17 @@ async function getData(city: string): Promise<Room[]> {
     return data;
 }
 
-export default async function DataPage({ params }: { params: { city: string } }) {
-//   const params = useParams();
-//   const city = params.city as string || "*";
+export default async function DataPage({ params, searchParams }: { params: { city: string }, searchParams: { [key: string]: string | undefined }}) {
 
-  const data = await getData(params.city);
+  const data = await getData(params.city, searchParams.from, searchParams.to);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <h1>ROOM.nl archive data</h1>
         <div className="container mx-auto py-10 flex-grow">
-            <DataTable columns={columns} data={data} city={params.city} />
+            <DataTable columns={columns} data={data} props={
+                { from_date: searchParams.from, to_date: searchParams.to, city: params.city }
+            } />
         </div>
         <h3>Number of results: {data.length}</h3>
     </main>

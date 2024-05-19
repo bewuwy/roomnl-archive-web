@@ -32,13 +32,13 @@ import { DownloadButton } from "./downloadButton"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
-  city: string
+  props: { from_date: string | undefined, to_date: string | undefined, city: string }
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  city,
+  props,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -60,11 +60,20 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  let downloadFileName = `roomnl_${props.city}`;
+  if (props.from_date) {
+    downloadFileName += `_${props.from_date}`;
+  }
+  if (props.to_date) {
+    downloadFileName += `_${props.to_date}`;
+  }
+  downloadFileName += '.csv';
+
   return (
     <div>
       <div className="flex justify-between">
-        <DateRangePicker />
-        <DownloadButton data={data} filename={`room_data_${city}.csv`} />
+        <DateRangePicker from={ props.from_date } to={ props.to_date } />
+        <DownloadButton data={data} filename={downloadFileName} />
       </div>
     <div className="flex items-center justify-around py-4">
       <Input
