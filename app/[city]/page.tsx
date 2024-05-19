@@ -71,7 +71,7 @@ export default async function DataPage({ params, searchParams }: { params: { cit
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <h1>ROOM.nl archive data</h1>
+        <h1>ROOM.nl archive data in <b>{params.city}</b></h1>
         <div className="container mx-auto py-10 flex-grow">
             <DataTable columns={columns} data={data} props={
                 { from_date: searchParams.from, to_date: searchParams.to, city: params.city }

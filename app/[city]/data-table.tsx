@@ -71,19 +71,19 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex justify-between">
+    <div className="flex items-center justify-between py-4">
+      
+      <div className="flex items-center gap-4">
         <DateRangePicker from={ props.from_date } to={ props.to_date } />
-        <DownloadButton data={data} filename={downloadFileName} />
+        <Input
+            placeholder="Filter address..."
+            value={(table.getColumn("address")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+            table.getColumn("address")?.setFilterValue(event.target.value)
+            }
+        />
       </div>
-    <div className="flex items-center justify-start py-4">
-      <Input
-          placeholder="Filter address..."
-          value={(table.getColumn("address")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-          table.getColumn("address")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-      />
+      <DownloadButton data={data} filename={downloadFileName} />
     </div>
     <div className="rounded-md border">
       <Table>

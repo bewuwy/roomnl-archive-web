@@ -23,10 +23,10 @@ export const columns: ColumnDef<Room>[] = [
     accessorKey: "address",
     header: "Address",
   },
-  {
-    accessorKey: "city",
-    header: "City",
-  },
+  // {
+  //   accessorKey: "city",
+  //   header: "City",
+  // },
   {
     accessorKey: "type",
     header: "Type of room",
@@ -44,6 +44,9 @@ export const columns: ColumnDef<Room>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      return <span className="flex justify-start ml-4">{row.getValue("reactions_num")}</span>
+    }
   },
   {
     accessorKey: "contract_date",
@@ -72,7 +75,7 @@ export const columns: ColumnDef<Room>[] = [
         month_str = `0${month}`;
       }
 
-      return `${day}.${month_str}.${year}`;
+      return <span className="flex ml-4">{`${day}.${month_str}.${year}`}</span>;
     },
   },
   {
@@ -137,7 +140,8 @@ export const columns: ColumnDef<Room>[] = [
         symbol = "✅";
       }
 
-      return symbol;
+      // return center-aligned symbol
+      return <span className="flex justify-center">{symbol}</span>;
     },
   },
 ]
