@@ -75,15 +75,7 @@ export function DataTable<TData, TValue>({
         <DateRangePicker from={ props.from_date } to={ props.to_date } />
         <DownloadButton data={data} filename={downloadFileName} />
       </div>
-    <div className="flex items-center justify-around py-4">
-      <Input
-          placeholder="Filter city..."
-          value={(table.getColumn("city")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("city")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-      />
+    <div className="flex items-center justify-start py-4">
       <Input
           placeholder="Filter address..."
           value={(table.getColumn("address")?.getFilterValue() as string) ?? ""}
