@@ -6,7 +6,7 @@ export default async function Home() {
 
   // get cities from the database
   const subabase = createClient();
-  const { data, error } = await subabase.from("distinct_cities").select();
+  const { data, error } = await subabase.from("distinct_cities").select().order("City");
 
   if (error) {
     throw new Error("Error fetching data from Supabase:\n" + error.details);

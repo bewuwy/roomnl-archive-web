@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "ROOM.nl archive",
   description: "Archive of ROOM.nl recently rented rooms data",
 };
-  
+
 export default function RootLayout({
   children,
 }: Readonly<{

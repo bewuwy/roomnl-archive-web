@@ -1,7 +1,19 @@
+import { Metadata } from "next";
 import { Room, columns } from "./columns"
 import { DataTable } from "./data-table"
 
 import { createClient } from '@/lib/supabase/server'
+
+export function generateMetadata({
+    params: { city },
+}:{
+    params: { city: string }
+}): Metadata {
+    return {
+        title: `ROOM.nl archive - ${city}`,
+        description: `Archive of ROOM.nl recently rented rooms data in ${city}`,
+    };
+}
 
 async function getData(city: string, from: string | undefined, to: string | undefined): Promise<Room[]> {
 
