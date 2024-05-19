@@ -29,19 +29,26 @@ export function DateRangePicker({
   to
 }: DatePickerProps) {
 
-  const from_date = from ? new Date(from) : addDays(new Date(), -30)
-  const to_date = to ? new Date(to) : new Date()
-
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: from_date,
-    to: to_date,
-  })
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   let params = new URLSearchParams(searchParams.toString());
+
+  let from_date = from ? new Date(from) : addDays(new Date(), -30)
+  let to_date = to ? new Date(to) : new Date()
+
+  if (params.has('from')) {
+    from_date = new Date(params.get('from') as string);
+  }
+  if (params.has('to')) {
+    to_date = new Date(params.get('to') as string);
+  }
+
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: from_date,
+    to: to_date,
+  })
 
   useEffect(() => {
     if (date?.from) {

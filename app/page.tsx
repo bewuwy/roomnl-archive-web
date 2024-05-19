@@ -2,7 +2,13 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
+import { DateRangePicker } from "@/components/ui/datepicker";
+
 import { useState } from "react";
+
+function redirect(city: string) {
+  window.location.href = `/${city}?${new URLSearchParams(window.location.search).toString()}`;
+}
 
 export default function Home() {
 
@@ -15,7 +21,7 @@ export default function Home() {
         <form className="flex flex-col gap-4 pt-4" onSubmit={
           (event) => {
             event.preventDefault();
-            window.location.href = `/${city}`;
+            redirect(city);
           }
         }>
           <Input
@@ -23,8 +29,11 @@ export default function Home() {
               onChange={(event) => setCity(event.target.value)}
               className="max-w-sm"
           />
+
+          <DateRangePicker />
+
           <Button type="submit" onClick={() => {
-            window.location.href = `/${city}`;
+            redirect(city);
           }}>See data for the city</Button>
         </form>
     </main>
