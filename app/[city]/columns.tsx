@@ -2,9 +2,23 @@
 
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Filter } from "lucide-react"
+import { Label } from "@/components/ui/label"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -29,7 +43,118 @@ export const columns: ColumnDef<Room>[] = [
   // },
   {
     accessorKey: "type",
-    header: "Type of room",
+    filterFn: (row, columnId, filterValue) => {
+
+      // check if row is in the filter array
+      if (filterValue === undefined) {
+        return true;
+      }
+
+      const type = row.getValue(columnId) as string;
+      return filterValue.includes(type);
+    },
+    header: ({ column }) => {
+
+      function addToFilter(value: string) {
+        console.log(value);
+
+        let curr_filter = column.getFilterValue() as string[] | undefined;
+        if (curr_filter === undefined) {
+          curr_filter = [];
+        }
+
+        curr_filter.push(value);
+        column.setFilterValue(curr_filter);
+
+        console.log(column.getFilterValue());
+      }
+
+      function removeFromFilter(value: string) {
+        console.log(value);
+
+        let curr_filter = column.getFilterValue() as string[] | undefined;
+        if (curr_filter === undefined) {
+          curr_filter = [];
+        }
+
+        const index = curr_filter.indexOf(value);
+        if (index > -1) {
+          curr_filter.splice(index, 1);
+        }
+        column.setFilterValue(curr_filter);
+      }
+
+      function getChecked(value: string) {
+        const filter = column.getFilterValue() as string[] | undefined;
+        if (filter === undefined) {
+          return false;
+        }
+
+        return filter.includes(value);
+      }
+
+      return <Popover>
+        <div className="flex justify-center">
+          <span>Type</span>
+          <PopoverTrigger><Filter className="ml-2 h-4 w-4" /></PopoverTrigger>
+        </div>
+        <PopoverContent className="flex flex-col gap-4 w-auto pr-8">
+          <span>Filter by room type:</span>
+          <div className="flex items-center space-x-2">
+            <Checkbox id="Furnished" checked={getChecked("Furnished")} onCheckedChange={(value) => {
+              if (value) {
+                addToFilter("Furnished")
+              } else {
+                removeFromFilter("Furnished")
+              }
+            }} /> <Label htmlFor="Furnished">🛋️ Furnished</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox id="Unfurnished" checked={getChecked("Unfurnished")} onCheckedChange={(value) => {
+              if (value) {
+                addToFilter("Unfurnished")
+              } else {
+                removeFromFilter("Unfurnished")
+              }
+            }} /> <Label htmlFor="Unfurnished">📦 Unfurnished</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox id="Upholstered" checked={getChecked("Upholstered")} onCheckedChange={(value) => {
+              if (value) {
+                addToFilter("Upholstered")
+              } else {
+                removeFromFilter("Upholstered")
+              }
+            }} /> <Label htmlFor="Upholstered">🚪 Upholstered</Label>
+          </div>
+        </PopoverContent>
+      </Popover>
+
+    },
+    cell: ({ row }) => {
+      let emoji = '';
+
+      switch (row.getValue("type")) {
+        case "Furnished":
+          emoji = "🛋️";
+          break;
+        case "Unfurnished":
+          emoji = "📦";
+          break;
+        case "Upholstered":
+          emoji = "🚪";
+          break;
+      }
+
+      return (<TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger className="flex w-full justify-center">
+            <span>{emoji}</span>
+          </TooltipTrigger>
+          <TooltipContent>{row.getValue("type")}</TooltipContent>
+        </Tooltip>
+        </TooltipProvider>)
+    }
   },
   {
     accessorKey: "reactions_num",
@@ -116,18 +241,19 @@ export const columns: ColumnDef<Room>[] = [
   {
     accessorKey: "priority",
     header: ({ column }) => {
+
+      function handleSwitchChange(checked: boolean) {
+        if (checked) {
+          column.setFilterValue(true)
+        } else {
+          column.setFilterValue(null)
+        }
+      }
+
       return (
         <div className="flex items-center gap-3">
           Priority
-          <Switch title="Show only rooms rented with priority" onCheckedChange={(checked) => {
-
-            if (checked) {
-              column.setFilterValue(true)
-            } else {
-              column.setFilterValue(null)
-            }
-
-          }} />
+          <Switch onCheckedChange={handleSwitchChange} title="Show only rooms rented with priority" />
         </div>
       )
     },
