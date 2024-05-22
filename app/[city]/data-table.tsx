@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/table"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 
 import { DateRangePicker } from "@/components/ui/datepicker"
 
@@ -75,13 +74,6 @@ export function DataTable<TData, TValue>({
       
       <div className="flex items-center gap-4">
         <DateRangePicker from={ props.from_date } to={ props.to_date } />
-        <Input
-            placeholder="Filter address..."
-            value={(table.getColumn("address")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-            table.getColumn("address")?.setFilterValue(event.target.value)
-            }
-        />
       </div>
       <DownloadButton data={data} filename={downloadFileName} />
     </div>

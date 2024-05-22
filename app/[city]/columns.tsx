@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 import {
   Tooltip,
   TooltipContent,
@@ -35,7 +36,28 @@ export type Room = {
 export const columns: ColumnDef<Room>[] = [
   {
     accessorKey: "address",
-    header: "Address",
+    header: ({ column }) => {
+
+    return <Popover>
+      <div className="flex justify-start items-center">
+        <span>Address</span>
+        <PopoverTrigger asChild><Button variant="ghost" className="ml-2 px-2"> 
+            <Filter className="h-4 w-4" /> 
+        </Button></PopoverTrigger>
+      </div>
+      <PopoverContent className="flex flex-col gap-4 w-auto pr-8">
+        <span>Filter by address:</span>
+        <Input
+          placeholder="Filter address..."
+          className="w-64"
+          value={(column.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            column.setFilterValue(event.target.value)
+          } />
+      </PopoverContent>
+    </Popover>
+
+    }
   },
   // {
   //   accessorKey: "city",
@@ -82,6 +104,11 @@ export const columns: ColumnDef<Room>[] = [
           curr_filter.splice(index, 1);
         }
         column.setFilterValue(curr_filter);
+
+        // if filter is empty, disable it
+        if (curr_filter.length === 0) {
+          column.setFilterValue(undefined);
+        }
       }
 
       function getChecked(value: string) {
@@ -94,9 +121,11 @@ export const columns: ColumnDef<Room>[] = [
       }
 
       return <Popover>
-        <div className="flex justify-center">
+        <div className="flex justify-center items-center">
           <span>Type</span>
-          <PopoverTrigger><Filter className="ml-2 h-4 w-4" /></PopoverTrigger>
+          <PopoverTrigger asChild><Button variant="ghost" className="ml-2 px-2"> 
+            <Filter className="h-4 w-4" /> 
+          </Button></PopoverTrigger>
         </div>
         <PopoverContent className="flex flex-col gap-4 w-auto pr-8">
           <span>Filter by room type:</span>
@@ -160,13 +189,16 @@ export const columns: ColumnDef<Room>[] = [
     accessorKey: "reactions_num",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Reactions
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex items-center">
+          <span>Reactions</span>
+          <Button
+            variant="ghost"
+            className="ml-2 px-2"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
       )
     },
     cell: ({ row }) => {
@@ -178,13 +210,16 @@ export const columns: ColumnDef<Room>[] = [
     sortingFn: "datetime",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Contract date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+          <div className="flex items-center">
+          <span>Contract date</span>
+          <Button
+            variant="ghost"
+            className="ml-2 px-2"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
       )
     },
     cell: ({ row }) => {
@@ -207,13 +242,16 @@ export const columns: ColumnDef<Room>[] = [
     accessorKey: "account_age",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Account age
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex items-center">
+          <span>Account age</span>
+          <Button
+            variant="ghost"
+            className="ml-2 px-2"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
       )
     },
     cell: ({ row }) => {
@@ -250,12 +288,31 @@ export const columns: ColumnDef<Room>[] = [
         }
       }
 
-      return (
-        <div className="flex items-center gap-3">
-          Priority
-          <Switch onCheckedChange={handleSwitchChange} title="Show only rooms rented with priority" />
+      function getChecked() {
+        let checked = column.getFilterValue();
+
+        if (checked === undefined || checked === null) {
+          return false;
+        }
+
+        return checked as boolean;
+      }
+
+      return <Popover>
+        <div className="flex justify-center items-center">
+          <span>Priority</span>
+          <PopoverTrigger asChild><Button variant="ghost" className="ml-2 px-2"> 
+            <Filter className="h-4 w-4" /> 
+          </Button></PopoverTrigger>
         </div>
-      )
+        <PopoverContent className="flex flex-col gap-4 w-auto pr-8">
+          <span>Filter by priority:</span>
+          <div className="flex items-center space-x-2">
+            <Switch onCheckedChange={handleSwitchChange} checked={getChecked()} id="priority" />
+            <Label htmlFor="priority">Only with priority</Label>
+          </div>
+        </PopoverContent>
+      </Popover>
     },
     cell: ({ row }) => {
       const priority = row.getValue("priority");
