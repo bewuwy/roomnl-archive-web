@@ -23,7 +23,7 @@ export default function HomeForm({
     let [city, setCity] = useState("");
   
     return (
-        <form className="flex flex-col gap-4 pt-4" onSubmit={
+        <form className="flex flex-col gap-4 pt-4 w-full sm:w-auto px-10" onSubmit={
         (event) => {
             event.preventDefault();
             redirect(city);

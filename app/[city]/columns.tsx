@@ -39,7 +39,7 @@ export const columns: ColumnDef<Room>[] = [
     header: ({ column }) => {
 
     return <Popover>
-      <div className="flex justify-start items-center">
+      <div className="flex justify-start items-center w-36 lg:w-52 xl:w-80">
         <span>Address</span>
         <PopoverTrigger asChild><Button variant="ghost" className="ml-2 px-2"> 
             <Filter className="h-4 w-4" /> 
@@ -56,7 +56,6 @@ export const columns: ColumnDef<Room>[] = [
           } />
       </PopoverContent>
     </Popover>
-
     }
   },
   // {
@@ -121,7 +120,7 @@ export const columns: ColumnDef<Room>[] = [
       }
 
       return <Popover>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center max-w-24">
           <span>Type</span>
           <PopoverTrigger asChild><Button variant="ghost" className="ml-2 px-2"> 
             <Filter className="h-4 w-4" /> 
@@ -202,7 +201,7 @@ export const columns: ColumnDef<Room>[] = [
       )
     },
     cell: ({ row }) => {
-      return <span className="flex justify-start ml-4">{row.getValue("reactions_num")}</span>
+      return <span className="flex justify-start">{row.getValue("reactions_num")}</span>
     }
   },
   {
@@ -211,7 +210,7 @@ export const columns: ColumnDef<Room>[] = [
     header: ({ column }) => {
       return (
           <div className="flex items-center">
-          <span>Contract date</span>
+          <span>Date</span>
           <Button
             variant="ghost"
             className="ml-2 px-2"
@@ -235,18 +234,18 @@ export const columns: ColumnDef<Room>[] = [
         month_str = `0${month}`;
       }
 
-      return <span className="flex ml-4">{`${day}.${month_str}.${year}`}</span>;
+      return <span className="flex">{`${day}.${month_str}.${year}`}</span>;
     },
   },
   {
     accessorKey: "account_age",
     header: ({ column }) => {
       return (
-        <div className="flex items-center">
+        <div className="flex items-center xl:w-48">
           <span>Account age</span>
           <Button
             variant="ghost"
-            className="ml-2 px-2"
+            className="xl:ml-2 px-2"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             <ArrowUpDown className="h-4 w-4" />

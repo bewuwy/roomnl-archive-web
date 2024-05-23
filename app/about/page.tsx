@@ -4,7 +4,7 @@ export default function AboutPage() {
         <div className="flex flex-col gap-8 max-w-prose">
             <div>
                 <h1 className="text-2xl font-bold">About ROOM archive</h1>
-                <p className="mt-4">This is a simple website aimed to provide students with historical data and statistics of rooms rented on the ROOM.nl platform.</p>
+                <p className="mt-4">This is a simple website aimed to provide students with historical data and statistics of rooms rented on the ROOM.nl platform in Netherlands.</p>
             </div>
 
             <div>
@@ -14,7 +14,7 @@ export default function AboutPage() {
 
             <div>
                 <h2 className="text-xl font-bold">What can I do with this data?</h2>
-                <p className="mt-4">You can view the data in a tabular format, filter it by city, date, and other parameters, and download it as a CSV file.</p>
+                <p className="mt-4">You can view the data in a tabular format, filter it by city, date or other parameters. The data can also be downloaded as a CSV file.</p>
             </div>
 
             <div>

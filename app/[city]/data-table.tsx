@@ -70,10 +70,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-    <div className="flex items-center justify-between py-4">
+    <div className="flex py-4 flex-col justify-start gap-4 sm:gap-0 sm:flex-row sm:justify-between sm:items-center">
       
       <div className="flex items-center gap-4">
-        <DateRangePicker from={ props.from_date } to={ props.to_date } />
+        <DateRangePicker from={ props.from_date } to={ props.to_date } className="w-full" />
       </div>
       <DownloadButton data={data} filename={downloadFileName} />
     </div>
