@@ -13,6 +13,11 @@ export default function AboutPage() {
             </div>
 
             <div>
+                <h2 className="text-xl font-bold" id="data-unavailable">Why is some data unavailable?</h2>
+                <p className="mt-4">All of the data available on this site is fetched (<i>scraped</i>) from the ROOM.nl sites, hence if some data was not fetched while it was available it is unforutanetely lost forever. This can be the case with some columns of older rooms.</p>
+            </div>
+
+            <div>
                 <h2 className="text-xl font-bold">What can I do with this data?</h2>
                 <p className="mt-4">You can view the data in a tabular format, filter it by city, date or other parameters. The data can also be downloaded as a CSV file.</p>
             </div>

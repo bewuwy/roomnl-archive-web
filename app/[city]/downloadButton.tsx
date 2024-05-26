@@ -13,7 +13,7 @@ import { Download } from 'lucide-react'
 
 export function DownloadButton({ data, filename }: { data: any[], filename: string }) {
 
-    const headers = ["Address", "City", "Room type", "Number of reactions", "Contract date", "Account age (in days)", "Priority"];
+    const headers = ["Address", "City", "Room type", "Number of reactions", "Contract date", "Account age (in days)", "Priority", "Rent", "Area"];
 
     return (<TooltipProvider>
     <Tooltip>

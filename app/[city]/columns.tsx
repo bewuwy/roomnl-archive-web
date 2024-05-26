@@ -18,8 +18,9 @@ import {
 
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Filter } from "lucide-react"
+import { ArrowUpDown, Filter } from "lucide-react"
 import { Label } from "@/components/ui/label"
+import Link from "next/link"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -27,6 +28,8 @@ export type Room = {
   address: string
   city: string
   type: string
+  area: number
+  rent: number
   reactions_num: number
   contract_date: Date
   account_age: number
@@ -182,6 +185,44 @@ export const columns: ColumnDef<Room>[] = [
           <TooltipContent>{row.getValue("type")}</TooltipContent>
         </Tooltip>
         </TooltipProvider>)
+    }
+  },
+  {
+    accessorKey: "area",
+    header: "Area",
+    cell: ({ row }) => {
+
+      if (row.getValue("area") == null) {
+        return (<TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger className="flex w-full justify-start">
+              <span>?</span>
+            </TooltipTrigger>
+            <TooltipContent>Unfortunately, this data is not available. <Link href="/about#data-unavailable">Why?</Link></TooltipContent>
+          </Tooltip>
+        </TooltipProvider>)
+      }
+
+      return <span className="flex justify-start">{row.getValue("area")} m²</span>
+    }
+  },
+  {
+    accessorKey: "rent",
+    header: "Rent",
+    cell: ({ row }) => {
+
+      if (row.getValue("rent") == null) {
+        return (<TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger className="flex w-full justify-start">
+              <span>?</span>
+            </TooltipTrigger>
+            <TooltipContent>Unfortunately, this data is not available. <Link href="/about#data-unavailable">Why?</Link></TooltipContent>
+          </Tooltip>
+        </TooltipProvider>)
+      }
+
+      return <span className="flex justify-start">€{row.getValue("rent")}</span>
     }
   },
   {

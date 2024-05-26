@@ -35,7 +35,7 @@ async function getData(city: string, from: string | undefined, to: string | unde
         to = to_date.getFullYear() + "-" + (to_date.getMonth() + 1) + "-" + to_date.getDate();
     }
 
-    const data_raw = await supabase.from("rented_rooms").select()
+    const data_raw = await supabase.from("rooms_data").select()
         .ilike("City", `${city}%`).gte('Contract date', from).lte('Contract date', to)
         .order('Contract date', {ascending: false}); // .range(0, 100);
 
@@ -59,6 +59,8 @@ async function getData(city: string, from: string | undefined, to: string | unde
             contract_date: new Date(room_raw['Contract date']),
             account_age: room_raw['Account age'],
             priority: room_raw['Priority'],
+            rent: room_raw['Rent'],
+            area: room_raw['Area'],
         });
     });
 
