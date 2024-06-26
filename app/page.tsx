@@ -15,7 +15,10 @@ export default async function Home() {
   let cities: {label: string, value: string}[] = [];
 
   if (data) {
-    data.forEach(city => {
+
+    let data_raw = data as {City: string}[];
+
+    data_raw.forEach(city => {
       cities.push({
         label: city['City'],
         value: city['City']

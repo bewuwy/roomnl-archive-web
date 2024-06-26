@@ -50,7 +50,21 @@ async function getData(city: string, from: string | undefined, to: string | unde
 
     let data: Room[] = [];
 
-    data_raw.data.forEach(room_raw => {
+    type RoomRaw = {
+        'Current address': string,
+        'City': string,
+        'Type of room': string,
+        'Number of reactions': number,
+        'Contract date': string,
+        'Account age': number,
+        'Priority': boolean,
+        'Rent': number,
+        'Area': number,
+    }
+
+    let rooms_raw: RoomRaw[] = data_raw.data as RoomRaw[];
+
+    rooms_raw.forEach(room_raw => {
         data.push({
             address: room_raw['Current address'],
             city: room_raw['City'],
